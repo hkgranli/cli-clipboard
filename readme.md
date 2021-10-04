@@ -11,7 +11,7 @@ $ cpd list
 3 QFB
 
 $ cpd get 2
-Copying code for Dragonhunter to clipboard
+Copying entry for Dragonhunter to clipboard
 wrote [&DQEuFSo6GzkmDwAAihIAAEgBAAD+AAAAtRIAAAAAAAAAAAAAAAAAAAAAAAA=] to clipboard
 ```
 

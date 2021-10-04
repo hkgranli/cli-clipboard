@@ -144,7 +144,7 @@ fn get_clip(vecman : &Vec<Clip>){
     if index-1 > vecman.len(){
         panic!("Invalid index!! cpd list for valid arguments");
     }
-    println!("Copying code for {} to clipboard", vecman[index-1].name);
+    println!("Copying entry for {} to clipboard", vecman[index-1].name);
     write_to_clipboard(&vecman[index-1].code.to_string());
 }
 
@@ -181,7 +181,7 @@ fn main() {
 
     let vecman : Vec<Clip> = read_clips(&find_clipfile());
 
-    match action.as_str(){
+ action.as_str(){
         "add" | "new" => {
             add_clip(vecman);
         },
