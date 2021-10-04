@@ -12,6 +12,8 @@ use std::io::Write;
 
 use home::home_dir;
 
+use substring::Substring;
+
 struct Clip{
     name : String,
     code : String
@@ -46,10 +48,17 @@ fn read_clips(path : &String) -> Vec<Clip>{
 
     for clip_str in split{
         let values : Vec<&str> = clip_str.split(",").collect();
-        if values.len() != 2 {
+        if values.len() < 2 {
             continue;
         }
-        clip_vec.push(create_clip(values[0].to_string(), values[1].to_string()));
+
+        // allow clipboard content to contain ,
+        
+        let index_of_comma = values[0].len()+1;
+
+        let code = clip_str.substring(index_of_comma, clip_str.len());
+
+        clip_vec.push(create_clip(values[0].to_string(), code.to_string()));
     }
 
     return clip_vec;
@@ -181,7 +190,7 @@ fn main() {
 
     let vecman : Vec<Clip> = read_clips(&find_clipfile());
 
- action.as_str(){
+    match action.as_str(){
         "add" | "new" => {
             add_clip(vecman);
         },
