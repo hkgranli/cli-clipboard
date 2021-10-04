@@ -1,0 +1,10 @@
+[package]
+name = "cpd"
+version = "0.1.0"
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+clipboard = "0.5.0"
+home = "0.5.3"
