@@ -1,5 +1,3 @@
-extern crate clipboard;
-
 use std::fmt; // import format
 use std::fs; // import file system
 
@@ -10,10 +8,14 @@ use clipboard::ClipboardContext;
 use std::io;
 use std::io::Write;
 
+// easily fetch home-directory
 use home::home_dir;
 
 use substring::Substring;
 
+use serde::{Serialize, Deserialize};
+
+#[derive(Serialize, Deserialize, Debug)]
 struct Clip{
     name : String,
     code : String
@@ -24,13 +26,13 @@ impl fmt::Display for Clip{
         write!(fmt, "{}, {}", self.name, self.code)
     }
 }
-
+/*
 impl fmt::Debug for Clip{
     fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result{
         write!(fmt, "{}, {}", self.name, self.code)
     }
 }
-
+*/
 fn create_clip(name: String, code: String) -> Clip{
     Clip{
         name, 
@@ -39,27 +41,14 @@ fn create_clip(name: String, code: String) -> Clip{
 }
 
 fn read_clips(path : &String) -> Vec<Clip>{
-    let mut clip_vec = Vec::new();
     
     let content = fs::read_to_string(&path)
     .expect("Something went wrong reading the file");
 
-    let mut split = content.lines();
 
-    for clip_str in split{
-        let values : Vec<&str> = clip_str.split(",").collect();
-        if values.len() < 2 {
-            continue;
-        }
+    // use serde to convert the json string to vec 
 
-        // allow clipboard content to contain ,
-        
-        let index_of_comma = values[0].len()+1;
-
-        let code = clip_str.substring(index_of_comma, clip_str.len());
-
-        clip_vec.push(create_clip(values[0].to_string(), code.to_string()));
-    }
+    let mut clip_vec : Vec<Clip> = serde_json::from_str(&content).unwrap();
 
     return clip_vec;
 
@@ -69,15 +58,10 @@ fn write_clips(clips : Vec<Clip>, path:&String) -> (){
     fs::remove_file(&path)
     .expect("Something went wrong deleting the file");
 
-    let mut clip_string = String::new();
+    // serialize the vector into json string 
+    let mut clip_string = serde_json::to_string(&clips).unwrap();
 
-    for clip in clips{
-        clip_string = format!("{}\n{},{}", clip_string, clip.name, clip.code);
-    }
-
-    let write_result = fs::write(&path, clip_string);
-
-    match write_result{
+    match fs::write(&path, clip_string){
         Ok(v) => println!("Saved successfully"),
         Err(v) => println!("Error saving")
     }

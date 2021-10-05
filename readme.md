@@ -2,8 +2,6 @@
 
 Simple program which stores your current clipboard content into `~/.clipboardfile` for later extraction. Probably only works on linux btw idk
 
-ALSO GUYS DONT STORE stuff over multiple lines
-
 ```
 $ cpd list 
 1 Condi tempest
