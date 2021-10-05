@@ -11,7 +11,6 @@ use std::io::Write;
 // easily fetch home-directory
 use home::home_dir;
 
-use substring::Substring;
 
 use serde::{Serialize, Deserialize};
 
@@ -48,7 +47,7 @@ fn read_clips(path : &String) -> Vec<Clip>{
 
     // use serde to convert the json string to vec 
 
-    let mut clip_vec : Vec<Clip> = serde_json::from_str(&content).unwrap();
+    let clip_vec : Vec<Clip> = serde_json::from_str(&content).unwrap();
 
     return clip_vec;
 
@@ -59,11 +58,11 @@ fn write_clips(clips : Vec<Clip>, path:&String) -> (){
     .expect("Something went wrong deleting the file");
 
     // serialize the vector into json string 
-    let mut clip_string = serde_json::to_string(&clips).unwrap();
+    let clip_string = serde_json::to_string(&clips).unwrap();
 
     match fs::write(&path, clip_string){
-        Ok(v) => println!("Saved successfully"),
-        Err(v) => println!("Error saving")
+        Ok(_v) => println!("Saved successfully"),
+        Err(_v) => println!("Error saving")
     }
 
 }
@@ -80,7 +79,7 @@ fn read_from_clipboard() -> String{
 
     match val {
         Ok(v) => return v.to_string(),
-        Err(e) => panic!("couldnt read clipboard")
+        Err(_e) => panic!("couldnt read clipboard")
     }
 }
 
@@ -143,16 +142,15 @@ fn get_clip(vecman : &Vec<Clip>){
 
 fn write_to_clipboard(cont : &String) -> (){
     let mut ctx : ClipboardContext = ClipboardProvider::new().unwrap();
-    let res = ctx.set_contents(cont.to_string());
     
-    match res {
-        Ok(v) => println!("wrote {} to clipboard", cont),
+    match  ctx.set_contents(cont.to_string()){
+        Ok(_v) => println!("wrote {} to clipboard", cont),
         Err(e) => println!("{}",e)
     }
     let _ = ctx.get_contents();
 }
 
-fn remove_clip_cli(mut vecman : Vec<Clip>){
+fn remove_clip_cli(vecman : Vec<Clip>){
     let index_input = std::env::args().nth(2).expect("No further argument given, use 'cpd list' or 'Cliptab help'");
     let index : usize = index_input.parse().unwrap();
     if index-1 > vecman.len(){
@@ -166,6 +164,7 @@ fn remove_clip_cli(mut vecman : Vec<Clip>){
     let path : String = find_clipfile();
 
     write_clips(new_vec, &path);
+
 }
 
 fn main() {
