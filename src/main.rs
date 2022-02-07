@@ -10,7 +10,7 @@ use std::io::Write;
 
 // easily fetch home-directory
 use home::home_dir;
-
+use std::fs::File;
 
 use serde::{Serialize, Deserialize};
 
@@ -39,15 +39,31 @@ fn create_clip(name: String, code: String) -> Clip{
     }
 }
 
-fn read_clips(path : &String) -> Vec<Clip>{
-    
-    let content = fs::read_to_string(&path)
-    .expect("Something went wrong reading the file");
+fn file_exists(path : &String) -> bool{
+    return fs::metadata(path).is_ok()
+}
 
+fn read_clips(path : &String) -> Vec<Clip>{
+
+    let content: String; 
+    let clip_vec : Vec<Clip>;
+
+    if file_exists(&path){
+        content = fs::read_to_string(&path).expect("Something went wrong reading the file");
+
+        clip_vec = match serde_json::from_str(&content) {
+            Ok(val)  => val,
+            Err(_err) => Vec::new(),
+        };
+
+    }else{
+        clip_vec = Vec::new();
+         //empty json
+        File::create(&path)
+    .expect("failed to create clipboardfile");
+    }
 
     // use serde to convert the json string to vec 
-
-    let clip_vec : Vec<Clip> = serde_json::from_str(&content).unwrap();
 
     return clip_vec;
 
@@ -111,7 +127,7 @@ fn add_clip(mut vecman : Vec<Clip>){
 }
 
 fn find_clipfile() -> String {
-
+    
     let home = home_dir();
 
     match home{
