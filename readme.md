@@ -17,7 +17,7 @@ wrote [&DQEuFSo6GzkmDwAAihIAAEgBAAD+AAAAtRIAAAAAAAAAAAAAAAAAAAAAAAA=] to clipboa
 
 ```
 $ cargo build --release 
-$ sudo mv target/release/cpd /usr/bin
+$ sudo mv target/release/cpd /usr/local/bin
 ```
 
 ## Help
@@ -27,4 +27,4 @@ $ cpd help
 ```
 ## closing thoughts
 
-well first of all i want to thank the reigning norwegian champion of snow volleyball : matato for support and ideas during a tough development period. check out matato games, or his new rust-based company `must industries` - it really is a must to check it out lmao 
+shout out to the community for bughunting
