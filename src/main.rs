@@ -104,6 +104,7 @@ fn get_help() -> (){
     \t- add/new: store a new Clip => ex: cpd add
     \t- remove/rm/delete + [index]: removes a stored Clip by index => ex: cpd remove 2
     \t- list/ls: lists all Clips => ex: cpd list
+    \t\t flags: -v | --verbose => prints both keyword and code
     \t- get + [index]: copies desired Clip code to clipboard => ex: cpd get 1
     ".to_string();
 
@@ -143,6 +144,12 @@ fn find_clipfile() -> String {
 fn list_clips(vecman : &Vec<Clip>){
     for (index, clip) in vecman.iter().enumerate(){
         println!("{} {}", index+1, clip.name);
+    }
+}
+
+fn list_clips_verbose(vecman : &Vec<Clip>){
+    for (index, clip) in vecman.iter().enumerate(){
+        println!("{} {} -> {}", index+1, clip.name, clip.code);
     }
 }
 
@@ -200,7 +207,20 @@ fn main() {
             get_clip(&vecman);
         },
         "list" | "ls" => {
-            list_clips(&vecman);
+            match std::env::args().nth(2){
+                Some(val) => match val.as_str(){
+                    "--verbose" | "-v" => {
+                        list_clips_verbose(&vecman);
+                    },
+                    _ => {
+                        list_clips(&vecman);
+                    }
+                },
+                None => {
+                    list_clips(&vecman);
+                }
+            }
+            
         },
         _  => {
             get_help();
