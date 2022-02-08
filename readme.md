@@ -1,6 +1,6 @@
 # cpd - CLI Clipboard Storage 
 
-Simple program which stores your current clipboard content into `~/.clipboardfile` for later extraction. Probably only works on linux btw idk
+Simple program which stores your current clipboard content into `~/.clipboardfile` for later extraction. Works on linux, rumours has it that it works on macos as well(!). 
 
 ```
 $ cpd list 
